@@ -1,3 +1,5 @@
+import AppLayout from "./AppLayout";
+
 function Home() {
   return (
     <div>
