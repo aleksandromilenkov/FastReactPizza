@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { Form, redirect, useNavigate } from "react-router-dom";
+import { createOrder } from "../../services/apiRestaurant";
 
 // https://uibakery.io/regex-library/phone-number
 const isValidPhone = (str) =>
@@ -37,8 +39,9 @@ function CreateOrder() {
   return (
     <div>
       <h2>Ready to order? Let's go!</h2>
-
-      <form>
+      {/* its not necessary to speciy the action if the action is the current url because react already know the path that you are*/}
+      {/* <Form method="POST" action="/order/new"> */}
+      <Form method="POST" action="/order/new">
         <div>
           <label>First Name</label>
           <input type="text" name="customer" required />
@@ -70,11 +73,27 @@ function CreateOrder() {
         </div>
 
         <div>
+          <input type="hidden" name="cart" value={JSON.stringify(cart)} />
           <button>Order now</button>
         </div>
-      </form>
+      </Form>
     </div>
   );
+}
+
+// when we submit the form, this action function will be triggered
+export async function action({ request }) {
+  const formData = await request.formData();
+  const data = Object.fromEntries(formData);
+  console.log(data);
+  const order = {
+    ...data,
+    cart: JSON.parse(data.cart),
+    priority: data.priority === "on",
+  };
+  console.log(order);
+  const newOrder = await createOrder(order);
+  return redirect(`/order/${newOrder.id}`);
 }
 
 export default CreateOrder;
