@@ -57,6 +57,10 @@ export const {
 } = cartSlice.actions;
 export default cartSlice.reducer;
 
+export const getCart = (state) => {
+  return state.cart.cart;
+};
+
 export const getTotalCartPrice = (state) => {
   return state.cart.cart.reduce((acc, val) => acc + val.totalPrice, 0);
 };
@@ -64,3 +68,6 @@ export const getTotalCartPrice = (state) => {
 export const getTotalCartQuantity = (state) => {
   return state.cart.cart.reduce((acc, val) => acc + val.quantity, 0);
 };
+
+export const getCurrentQuantityById = (id) => (state) =>
+  state.cart.cart.find((item) => item.pizzaId === id)?.quantity ?? 0;

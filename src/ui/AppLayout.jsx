@@ -1,11 +1,12 @@
 import Header from "./Header";
 import CartOverview from "../features/cart/CartOverview";
-import { Outlet, useNavigation } from "react-router-dom";
+import { Outlet, useLocation, useNavigation } from "react-router-dom";
 import Loader from "./Loader";
 
 const AppLayout = () => {
   const navigation = useNavigation();
   const isLoading = navigation.state === "loading";
+  const location = useLocation();
   return (
     <div className="grid  h-screen  grid-rows-[auto_1fr_auto] ">
       {isLoading && <Loader />}
@@ -15,7 +16,7 @@ const AppLayout = () => {
           <Outlet />
         </main>
       </div>
-      <CartOverview />
+      {location.pathname !== "/cart" && <CartOverview />}
     </div>
   );
 };
