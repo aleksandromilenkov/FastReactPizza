@@ -31,7 +31,9 @@ const fakeCart = [
 ];
 
 function Cart() {
+  console.log("first");
   const cart = useSelector(getCart);
+  console.log(cart);
   const userName = useSelector(getUsername);
   const dispatch = useDispatch();
   if (!cart.length) return <EmptyCart />;
