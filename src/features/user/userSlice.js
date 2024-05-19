@@ -64,3 +64,7 @@ export default userSlice.reducer;
 export const { updateName } = userSlice.actions;
 
 export const getUsername = (state) => state.user.username;
+export const getUserAddress = (state) => state.user.address;
+export const getUserPosition = (state) => state.user.position;
+export const getStatus = (state) => state.user.status;
+export const getError = (state) => state.user.error;
