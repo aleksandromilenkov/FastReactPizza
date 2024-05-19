@@ -6,8 +6,9 @@ import {
   formatDate,
 } from "../../utils/helpers";
 import { getOrder } from "../../services/apiRestaurant";
-import { useLoaderData, useParams } from "react-router-dom";
+import { useFetcher, useLoaderData, useParams } from "react-router-dom";
 import OrderItem from "./OrderItem";
+import { useEffect } from "react";
 
 // const order = {
 //   id: "ABCDEF",
@@ -47,6 +48,13 @@ import OrderItem from "./OrderItem";
 // eslint-disable-next-line react/prop-types
 function Order() {
   const order = useLoaderData();
+  //with React Router, useFetcher is using the fetched data in the loader function in the route that you'll specified.
+  // in this example we are using the data loaded in the loader function in the Menu component (route)
+  const fetcher = useFetcher();
+  useEffect(() => {
+    if (!fetcher.data && fetcher.state === "idle") fetcher.load("/menu");
+  }, [fetcher]);
+  console.log(fetcher.data);
   console.log(order);
   // Everyone can search for all orders, so for privacy reasons we're gonna gonna exclude names or address, these are only for the restaurant staff
   const {
@@ -87,7 +95,15 @@ function Order() {
       </div>
       <ul className="divide-y divide-stone-300 border-b border-t">
         {cart.map((item, idx) => (
-          <OrderItem item={item} key={idx} />
+          <OrderItem
+            item={item}
+            key={idx}
+            isLoadingIngredients={fetcher.state === "loading"}
+            ingredients={
+              fetcher?.data?.find((pizza) => pizza.id === item.pizzaId)
+                .ingredients ?? []
+            }
+          />
         ))}
       </ul>
       <div className="space-y-2 bg-stone-200 px-6 py-5">
